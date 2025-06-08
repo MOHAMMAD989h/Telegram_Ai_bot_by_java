@@ -14,12 +14,13 @@ import java.util.List;
 public class JavaBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
-        return "HomeTech_Support_1_bot";
+        return System.getenv("TELEGRAM_BOT_NAME");
+
     }
 
     @Override
     public String getBotToken() {
-        return "7724285641:AAETN6ppyqOoUwEUmkIphfzTgG9mO41kIXM";
+        return System.getenv("TELEGRAM_BOT_TOKEN");
     }
 
     @Override

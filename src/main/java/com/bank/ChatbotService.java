@@ -10,9 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ChatbotService {
-    private static final String API_KEY = "AIzaSyBjfXlrJJhftFIeNvtozhK-JJ9yYn73K6U";
+    private static final String API_KEY = System.getenv("GOOGLE_API_KEY");
 
-    private static final String MODEL_NAME = "gemini-1.5-flash";
+    private static final String MODEL_NAME =System.getenv("GOOGLE_MODEL_NAME");
 
     public static String getAIResponse(String message) {
         try {
