@@ -30,7 +30,7 @@ public class JavaBot extends TelegramLongPollingBot {
         }
         else if(update.getMessage().getText().equals("/operator")) {
             sendText(update,"برای ارسال پیام به اپراتور پیام خود را داده و در ابتدای ان comment/  بنویسید");
-        } else if (update.getMessage().getText().equals("/comment")) {
+        } else if (update.getMessage().getText().startsWith("/comment")) {
                 sendTextToOperator(update,update.getMessage().getText());
         } else if(update.getMessage().hasDocument()){
             sendText(update,"please not send document");
