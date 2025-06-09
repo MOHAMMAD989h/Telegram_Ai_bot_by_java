@@ -28,16 +28,22 @@ public class JavaBot extends TelegramLongPollingBot {
         if (!update.hasMessage()) {
             System.out.println("null-enter text");
         }
-        else if(update.getMessage().hasDocument()){
+        else if(update.getMessage().getText().equals("/operator")) {
+            sendText(update,"برای ارسال پیام به اپراتور پیام خود را داده و در ابتدای ان comment/  بنویسید");
+        } else if (update.getMessage().getText().equals("/comment")) {
+                sendTextToOperator(update,update.getMessage().getText());
+        } else if(update.getMessage().hasDocument()){
             sendText(update,"please not send document");
         }
         else if(update.getMessage().hasPhoto()){
             sendText(update,"please not send photo");
         }
+        else if(update.getMessage().hasAudio()){
+            sendText(update,"please not send audio");
+        }
         else if(update.getMessage().hasText()){
             sendText(update,ChatbotService.getAIResponse(update.getMessage().getText()));
         }
-        else if(update.getMessage().hasAudio()){}
         }catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -55,65 +61,15 @@ public class JavaBot extends TelegramLongPollingBot {
             execute(message);
         }
 
+        public void sendTextToOperator(Update update,String text) throws TelegramApiException {
+        String chat_id = "7266124167";
 
-        public void getDocument(Update update) throws TelegramApiException {
-            if(!update.hasMessage()){
-                System.out.println("null-enter text");
-                return;
-            }
-            Document document = update.getMessage().getDocument();
-            String fileid = document.getFileId();
+        SendMessage message = new SendMessage();
 
-            GetFile getFile = new GetFile(fileid);
+        message.setChatId(chat_id);
 
-
-            String path = execute(getFile).getFilePath();
-
-            File file = downloadFile(path);
-
-            file.renameTo(new File("data/" + document.getFileName()));
+        message.setText(text);
+        execute(message);
         }
-        public void getPhoto(Update update) throws TelegramApiException {
-        List<PhotoSize> photos = update.getMessage().getPhoto();
-        PhotoSize largestPhoto = photos.stream()
-                .max(Comparator.comparing(PhotoSize::getFileSize))
-                .orElse(null);
-        if (largestPhoto != null) {
-            String fileId = largestPhoto.getFileId();
 
-            String fileName = largestPhoto.getFileUniqueId() + ".jpg";
-
-            GetFile getFileRequest = new GetFile(fileId);
-            org.telegram.telegrambots.meta.api.objects.File telegramFile = execute(getFileRequest);
-
-            File localFile = downloadFile(telegramFile);
-
-            /*
-            File dataDir = new File("data/");
-            if (!dataDir.exists()) {
-                dataDir.mkdirs();
-            }
-               اگر پوشه نباشد می سازد
-             */
-            localFile.renameTo(new File("data/" + fileName));
-            System.out.println("Photo saved successfully as: " + fileName);
-        }
-    }
-    public void getAudio(Update update) throws TelegramApiException {
-        if(!update.hasMessage()){
-            System.out.println("null-enter text");
-            return;
-        }
-        Audio audio = update.getMessage().getAudio();
-        String fileid = audio.getFileId();
-
-        GetFile getFile = new GetFile(fileid);
-
-
-        String path = execute(getFile).getFilePath();
-
-        File file = downloadFile(path);
-
-        file.renameTo(new File("data/" + audio.getFileName()));
-    }
 }
