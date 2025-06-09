@@ -15,7 +15,6 @@ public class JavaBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         return System.getenv("TELEGRAM_BOT_NAME");
-
     }
 
     @Override
